@@ -1,5 +1,6 @@
 {
   "private": true,
+  "homepage": "https://toburger.github.io/fable-photoswipe",
   "scripts": {
     "build": "webpack -p",
     "start": "webpack-dev-server",
