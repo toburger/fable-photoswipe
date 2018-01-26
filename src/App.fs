@@ -1,4 +1,4 @@
-module fable_photoswipe
+module App
 
 open Fable.Core
 open Fable.PowerPack

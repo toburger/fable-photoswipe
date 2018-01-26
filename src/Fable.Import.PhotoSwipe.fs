@@ -1,8 +1,10 @@
+// ts2fable 0.5.2
 module rec Fable.Import.PhotoSwipe
 open System
 open Fable.Core
 open Fable.Import.JS
 open Fable.Import.Browser
+
 
 type [<AllowNullLiteral>] IExports =
     abstract PhotoSwipe: PhotoSwipeStatic
@@ -27,9 +29,9 @@ module PhotoSwipe =
         /// Internal property added by PhotoSwipe.
         abstract initialZoomLevel: float option with get, set
         /// Internal property added by PhotoSwipe.
-        abstract bounds: obj option with get, set
+        abstract bounds: obj option option with get, set
         /// Internal property added by PhotoSwipe.
-        abstract initialPosition: obj option with get, set
+        abstract initialPosition: obj option option with get, set
 
     /// Options for the base PhotoSwipe class. Derived from http://photoswipe.com/documentation/options.html
     type [<AllowNullLiteral>] Options =
@@ -206,7 +208,7 @@ module PhotoSwipe =
         abstract modal: bool option with get, set
 
     type [<AllowNullLiteral>] UIFramework =
-        [<Emit "$0[$1]{{=$2}}">] abstract Item: name: string -> obj with get, set
+        [<Emit "$0[$1]{{=$2}}">] abstract Item: name: string -> obj option with get, set
 
     /// Base type for PhotoSwipe user interfaces.
     /// T is the type of options that this PhotoSwipe.UI uses.
@@ -303,7 +305,7 @@ type [<AllowNullLiteral>] PhotoSwipe<'T> =
     /// Destroy gallery (unbind listeners, free memory). Automatically called after close().
     abstract destroy: unit -> unit
     /// Zoom in/out the current slide to a specified zoom level, optionally with animation.
-    abstract zoomTo: destZoomLevel: float * centerPoint: obj * speed: float * ?easingFn: (float -> float) * ?updateFn: (float -> unit) -> unit
+    abstract zoomTo: destZoomLevel: float * centerPoint: PhotoSwipeZoomToCenterPoint * speed: float * ?easingFn: (float -> float) * ?updateFn: (float -> unit) -> unit
     /// Apply zoom and pan to the current slide
     abstract applyZoomPan: zoomLevel: float * panX: float * panY: float -> unit
     /// Call this method after dynamically modifying the current, next, or previous slide in the items array.
@@ -311,28 +313,28 @@ type [<AllowNullLiteral>] PhotoSwipe<'T> =
     /// PhotoSwipe uses very simple Event/Messaging system.
     /// It has two methods shout (triggers event) and listen (handles event).
     /// For now there is no method to unbind listener, but all of them are cleared when PhotoSwipe is closed.
-    abstract listen: eventName: string * callback: (ResizeArray<obj> -> unit) -> unit
+    abstract listen: eventName: string * callback: (ResizeArray<obj option> -> unit) -> unit
     /// Called before slides change (before the content is changed ,but after navigation). Update UI here.
-    [<Emit "$0.listen('beforeChange',$1...)">] abstract listen_beforeChange: callback: (unit -> unit) -> unit
+    [<Emit "$0.listen('beforeChange',$1)">] abstract listen_beforeChange: callback: (unit -> unit) -> unit
     /// Called after slides change (after content has changed).
-    [<Emit "$0.listen('afterChange',$1...)">] abstract listen_afterChange: callback: (unit -> unit) -> unit
+    [<Emit "$0.listen('afterChange',$1)">] abstract listen_afterChange: callback: (unit -> unit) -> unit
     /// Called when an image is loaded.
-    [<Emit "$0.listen('imageLoadComplete',$1...)">] abstract listen_imageLoadComplete: callback: (float -> PhotoSwipe.Item -> unit) -> unit
+    [<Emit "$0.listen('imageLoadComplete',$1)">] abstract listen_imageLoadComplete: callback: (float -> PhotoSwipe.Item -> unit) -> unit
     /// Called when the viewport size changes.
-    [<Emit "$0.listen('resize',$1...)">] abstract listen_resize: callback: (unit -> unit) -> unit
+    [<Emit "$0.listen('resize',$1)">] abstract listen_resize: callback: (unit -> unit) -> unit
     /// Triggers when PhotoSwipe reads slide object data, which happens before content is set, or before lazy-loading is initiated.
     /// Use it to dynamically change properties of the slide object.
-    [<Emit "$0.listen('gettingData',$1...)">] abstract listen_gettingData: callback: (float -> PhotoSwipe.Item -> unit) -> unit
+    [<Emit "$0.listen('gettingData',$1)">] abstract listen_gettingData: callback: (float -> PhotoSwipe.Item -> unit) -> unit
     /// Called when mouse is first used (triggers only once).
-    [<Emit "$0.listen('mouseUsed',$1...)">] abstract listen_mouseUsed: callback: (unit -> unit) -> unit
+    [<Emit "$0.listen('mouseUsed',$1)">] abstract listen_mouseUsed: callback: (unit -> unit) -> unit
     /// Called when opening zoom in animation starting.
-    [<Emit "$0.listen('initialZoomIn',$1...)">] abstract listen_initialZoomIn: callback: (unit -> unit) -> unit
+    [<Emit "$0.listen('initialZoomIn',$1)">] abstract listen_initialZoomIn: callback: (unit -> unit) -> unit
     /// Called when opening zoom in animation finished.
-    [<Emit "$0.listen('initialZoomInEnd',$1...)">] abstract listen_initialZoomInEnd: callback: (unit -> unit) -> unit
+    [<Emit "$0.listen('initialZoomInEnd',$1)">] abstract listen_initialZoomInEnd: callback: (unit -> unit) -> unit
     /// Called when closing zoom out animation started.
-    [<Emit "$0.listen('initialZoomOut',$1...)">] abstract listen_initialZoomOut: callback: (unit -> unit) -> unit
+    [<Emit "$0.listen('initialZoomOut',$1)">] abstract listen_initialZoomOut: callback: (unit -> unit) -> unit
     /// Called when closing zoom out animation finished.
-    [<Emit "$0.listen('initialZoomOutEnd',$1...)">] abstract listen_initialZoomOutEnd: callback: (unit -> unit) -> unit
+    [<Emit "$0.listen('initialZoomOutEnd',$1)">] abstract listen_initialZoomOutEnd: callback: (unit -> unit) -> unit
     /// Allows overriding vertical margin for individual items.
     /// 
     /// Example:
@@ -343,18 +345,22 @@ type [<AllowNullLiteral>] PhotoSwipe<'T> =
     ///      gap.top = 50; // There will be 50px gap from top of viewport
     ///      gap.bottom = 100; // and 100px gap from the bottom
     /// });
-    [<Emit "$0.listen('parseVerticalMargin',$1...)">] abstract listen_parseVerticalMargin: callback: (PhotoSwipe.Item -> unit) -> unit
+    [<Emit "$0.listen('parseVerticalMargin',$1)">] abstract listen_parseVerticalMargin: callback: (PhotoSwipe.Item -> unit) -> unit
     /// Called when the gallery starts closing.
-    [<Emit "$0.listen('close',$1...)">] abstract listen_close: callback: (unit -> unit) -> unit
+    [<Emit "$0.listen('close',$1)">] abstract listen_close: callback: (unit -> unit) -> unit
     /// Gallery unbinds events (triggers before closing animation).
-    [<Emit "$0.listen('unbindEvents',$1...)">] abstract listen_unbindEvents: callback: (unit -> unit) -> unit
+    [<Emit "$0.listen('unbindEvents',$1)">] abstract listen_unbindEvents: callback: (unit -> unit) -> unit
     /// Called after the gallery is closed and the closing animation finishes.
     /// Clean up your stuff here.
-    [<Emit "$0.listen('destroy',$1...)">] abstract listen_destroy: callback: (unit -> unit) -> unit
+    [<Emit "$0.listen('destroy',$1)">] abstract listen_destroy: callback: (unit -> unit) -> unit
     /// Allow to call preventDefault on down and up events.
-    [<Emit "$0.listen('preventDragEvent',$1...)">] abstract listen_preventDragEvent: callback: (MouseEvent -> bool -> obj -> unit) -> unit
+    [<Emit "$0.listen('preventDragEvent',$1)">] abstract listen_preventDragEvent: callback: (MouseEvent -> bool -> obj -> unit) -> unit
     /// Triggers eventName event with args passed through to listeners.
-    abstract shout: eventName: string * [<ParamArray>] args: obj -> unit
+    abstract shout: eventName: string * [<ParamArray>] args: ResizeArray<obj option> -> unit
+
+type [<AllowNullLiteral>] PhotoSwipeZoomToCenterPoint =
+    abstract x: float with get, set
+    abstract y: float with get, set
 
 /// Base PhotoSwipe class. Derived from http://photoswipe.com/documentation/api.html
 type [<AllowNullLiteral>] PhotoSwipeStatic =
