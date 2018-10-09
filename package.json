@@ -3,7 +3,7 @@
   "homepage": "https://toburger.github.io/fable-photoswipe",
   "scripts": {
     "build": "webpack -p",
-    "start": "webpack-dev-server",
+    "start": "webpack-dev-server -d",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
@@ -11,12 +11,13 @@
     "@babel/preset-env": "^7.0.0",
     "@types/photoswipe": "^4.0.28",
     "babel-loader": "^8.0.0",
-    "css-loader": "^0.28.9",
+    "css-loader": "^1.0.0",
     "fable-loader": "^2.0.0",
-    "file-loader": "^1.1.6",
-    "style-loader": "^0.19.1",
-    "webpack": "3.10.0",
-    "webpack-dev-server": "2.11.1"
+    "file-loader": "^2.0.0",
+    "style-loader": "^0.23.1",
+    "webpack": "4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "3.1.9"
   },
   "dependencies": {
     "photoswipe": "^4.1.2"
