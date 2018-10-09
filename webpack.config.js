@@ -6,16 +6,16 @@ function resolve(filePath) {
   return path.join(__dirname, filePath)
 }
 
-var babelOptions = fableUtils.resolveBabelOptions({
-  presets: [
-    ["env", {
-      "targets": {
-        "browsers": "> 1%"
-      },
-      "modules": false
-    }]
-  ],
-});
+var babelOptions = {
+    presets: [
+        ["@babel/preset-env", {
+            "targets": {
+                "browsers": ["last 2 versions"]
+            },
+            "modules": false
+        }]
+    ]
+};
 
 var isProduction = process.argv.indexOf("-p") >= 0;
 console.log("Bundling for " + (isProduction ? "production" : "development") + "...");
