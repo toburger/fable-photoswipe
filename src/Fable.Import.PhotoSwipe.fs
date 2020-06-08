@@ -1,10 +1,9 @@
 // ts2fable 0.5.2
-module rec Fable.Import.PhotoSwipe
+module rec PhotoSwipe
+
 open System
 open Fable.Core
-open Fable.Import.JS
-open Fable.Import.Browser
-
+open Browser.Types
 
 type [<AllowNullLiteral>] IExports =
     abstract PhotoSwipe: PhotoSwipeStatic

@@ -1,10 +1,9 @@
 module App
 
 open Fable.Core
-open Fable.PowerPack
 open JsInterop
-open Fable.Import.Browser
-open Fable.Import.PhotoSwipe
+open Browser
+open PhotoSwipe
 
 importSideEffects "photoswipe/dist/photoswipe.css"
 importSideEffects "photoswipe/dist/default-skin/default-skin.css"
@@ -70,7 +69,7 @@ let showGallery galleryName idx = promise {
         | None -> null
         | Some idx ->
             let pageYScroll =
-                if Fable.Import.JS.isNaN window.pageYOffset
+                if JS.isNaN window.pageYOffset
                 then document.documentElement.scrollTop
                 else window.pageYOffset
             let item = document.querySelectorAll("table.content tr a").[idx]
